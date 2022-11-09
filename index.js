@@ -97,7 +97,7 @@ async function run(){
         res.send(reviews);
     });
 
-    app.get('/reviews',verifyJWT, async (req, res) => {
+    app.get('/reviews', verifyJWT, async (req, res) => {
 
         const decoded = req.decoded;
             
