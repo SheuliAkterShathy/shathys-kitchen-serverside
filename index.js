@@ -57,17 +57,18 @@ async function run(){
 
     app.get('/reviews/:id', async (req, res) => {
         const id = req.params.id;
+        
         const query = { service:id };
         const reviews = await reviewCollection.find(query).toArray();
         res.send(reviews);
     });
-    // app.get('/reviews/:email', async (req, res) => {
-    //     const email= req.query.email;
-    //     const query = { email:email };
-    //     console.log(query)
-    //     const reviews = await reviewCollection.find(query).toArray();
-    //     res.send(reviews);
-    // });
+    app.get('/reviews/:email', async (req, res) => {
+        const email= req.query.email;
+        const query = { email:email };
+        console.log(query)
+        const reviews = await reviewCollection.find(query).toArray();
+        res.send(reviews);
+    });
 
     app.get('/reviews', async (req, res) => {
         let query = {};
@@ -76,11 +77,36 @@ async function run(){
                 email: req.query.email
             }
         }
-        console.log(query)
+       
         const cursor = reviewCollection.find(query);
         const reviews = await cursor.toArray();
         res.send(reviews);
     });
+
+    app.get('/review/:id', async (req, res) => {
+        const id = req.params.id;
+        console.log(id)
+        console.log('test')
+        const query = { _id: ObjectId(id) };
+        const user = await reviewCollection.findOne(query);
+        res.send(user);
+    })
+
+    app.put('/review/:id', async (req, res) => {
+        const id = req.params.id;
+        const filter = { _id: ObjectId(id) };
+        const user = req.body;
+        const option = {upsert: true};
+        const updatedUser = {
+            $set: {
+                customer: user.name,
+             
+                message: user.message
+            }
+        }
+        const result = await reviewCollection.updateOne(filter, updatedUser, option);
+        res.send(result);
+    })
 
     app.delete('/reviews/:id',  async (req, res) => {
         const id = req.params.id;
