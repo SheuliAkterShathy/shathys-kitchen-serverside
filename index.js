@@ -81,12 +81,12 @@ async function run(){
         const result = await reviewCollection.insertOne(review);
         res.send(result);
     });
-
+// 
     app.get('/reviews/:id', async (req, res) => {
         const id = req.params.id;
         
         const query = { service:id };
-        const reviews = await reviewCollection.find(query).toArray();
+        const reviews = await reviewCollection.find(query).sort({time:'-1'}).toArray();
         res.send(reviews);
     });
     app.get('/reviews/:email', async (req, res) => {
